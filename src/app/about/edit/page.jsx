@@ -19,14 +19,6 @@ import CardPortfolio from "@/components/shared/Card/CardPortfolio";
 
 const EditProfile = () => {
   const router = useRouter();
-  const [profile, setProfile] = React.useState({
-    name: "",
-    title: "",
-    description: "",
-    image: "",
-    background: "",
-  });
-
   const portfolioInitialState = {
     role: "",
     company: "",
@@ -35,8 +27,37 @@ const EditProfile = () => {
     desc: "",
   };
 
+  // Hooks
+  const [profile, setProfile] = React.useState({
+    name: "",
+    title: "",
+    description: "",
+    image: "",
+    background: "",
+  });
+
   const [portfolio, setPortfolio] = React.useState([portfolioInitialState]);
 
+  React.useEffect(() => {
+    const stored = localStorage.getItem("userProfile");
+    if (stored) {
+      const parsedData = JSON.parse(stored);
+      setProfile({
+        name: parsedData.name || "",
+        title: parsedData.title || "",
+        description: parsedData.description || "",
+        image: parsedData.image || "",
+        background: parsedData.background || "",
+      });
+      setPortfolio(
+        parsedData.portfolio?.length > 0
+          ? parsedData.portfolio
+          : [portfolioInitialState]
+      );
+    }
+  }, []);
+
+  // HANDLER
   const handleAddPortfolio = () => {
     setPortfolio([...portfolio, portfolioInitialState]);
   };
@@ -61,6 +82,9 @@ const EditProfile = () => {
       ...profile,
       portfolio,
     };
+
+    localStorage.setItem("userProfile", JSON.stringify(data));
+    router.push("/about");
   };
 
   const PreviewPage = React.useMemo(() => {
@@ -98,7 +122,9 @@ const EditProfile = () => {
           <CardContent className="flex flex-col gap-4 px-2">
             <h4 className="text-sm font-semibold text-yellow-700">Portfolio</h4>
             {portfolio?.map((val, index) => (
-              <CardPortfolio val={val} index={index} />
+              <div key={index}>
+                <CardPortfolio val={val} />
+              </div>
             ))}
           </CardContent>
         </Card>
@@ -107,7 +133,7 @@ const EditProfile = () => {
   });
 
   return (
-    <div className="mt-6">
+    <div className="">
       <ProfileLayout
         main={
           <div className="w-full flex flex-col gap-4">
