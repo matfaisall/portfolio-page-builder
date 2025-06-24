@@ -7,85 +7,30 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { CircleX } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import CardPortfolio from "@/components/shared/Card/CardPortfolio";
 
+import useEdit from "./useEdit";
+
 const EditProfile = () => {
-  const router = useRouter();
-  const portfolioInitialState = {
-    role: "",
-    company: "",
-    start_date: 0,
-    end_date: 0,
-    desc: "",
-  };
+  const {
+    router,
 
-  // Hooks
-  const [profile, setProfile] = React.useState({
-    name: "",
-    title: "",
-    description: "",
-    image: "",
-    background: "",
-  });
+    profile,
+    setProfile,
+    portfolio,
+    setPortfolio,
 
-  const [portfolio, setPortfolio] = React.useState([portfolioInitialState]);
-
-  React.useEffect(() => {
-    const stored = localStorage.getItem("userProfile");
-    if (stored) {
-      const parsedData = JSON.parse(stored);
-      setProfile({
-        name: parsedData.name || "",
-        title: parsedData.title || "",
-        description: parsedData.description || "",
-        image: parsedData.image || "",
-        background: parsedData.background || "",
-      });
-      setPortfolio(
-        parsedData.portfolio?.length > 0
-          ? parsedData.portfolio
-          : [portfolioInitialState]
-      );
-    }
-  }, []);
-
-  // HANDLER
-  const handleAddPortfolio = () => {
-    setPortfolio([...portfolio, portfolioInitialState]);
-  };
-
-  const handleRemovePortfolio = (index) => {
-    if (portfolio.length > 1) {
-      setPortfolio(portfolio.filter((_, i) => i !== index));
-    }
-  };
-
-  const handlePortfolioChange = (index, key, value) => {
-    const newPortfolio = [...portfolio];
-    newPortfolio[index] = {
-      ...newPortfolio[index],
-      [key]: value,
-    };
-    setPortfolio(newPortfolio);
-  };
-
-  const handleSave = () => {
-    const data = {
-      ...profile,
-      portfolio,
-    };
-
-    localStorage.setItem("userProfile", JSON.stringify(data));
-    router.push("/about");
-  };
+    handleAddPortfolio,
+    handleRemovePortfolio,
+    handlePortfolioChange,
+    handleSave,
+  } = useEdit();
 
   const PreviewPage = React.useMemo(() => {
     return (
@@ -114,8 +59,7 @@ const EditProfile = () => {
               {profile.title || "Your Role"}
             </CardDescription>
             <CardDescription className="text-center">
-              {profile.description ||
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, earum!"}
+              {profile.description || "Lorem ipsum dolor sit amet consectetur."}
             </CardDescription>
           </CardContent>
           <hr className="my-4 border-t border-gray-300" />
@@ -257,7 +201,6 @@ const EditProfile = () => {
                         }
                       />
                     </div>
-                    {/* tambahkan input sampai kapan */}
                     <Textarea
                       placeholder="Description"
                       value={val.desc}
