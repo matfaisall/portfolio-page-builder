@@ -59,7 +59,7 @@ const EditProfile = () => {
               {profile.title || "Your Role"}
             </CardDescription>
             <CardDescription className="text-center">
-              {profile.description || "Lorem ipsum dolor sit amet consectetur."}
+              {profile.description || "write the description."}
             </CardDescription>
           </CardContent>
           <hr className="my-4 border-t border-gray-300" />
@@ -77,7 +77,7 @@ const EditProfile = () => {
   });
 
   return (
-    <div className="">
+    <div className="py-8">
       <ProfileLayout
         main={
           <div className="w-full flex flex-col gap-4">
