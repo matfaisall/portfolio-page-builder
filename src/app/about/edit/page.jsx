@@ -1,12 +1,21 @@
 "use client";
 import React from "react";
 import ProfileLayout from "@/components/layout/ProfileLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { CircleX } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import CardPortfolio from "@/components/shared/Card/CardPortfolio";
 
 const EditProfile = () => {
   const router = useRouter();
@@ -47,15 +56,55 @@ const EditProfile = () => {
     setPortfolio(newPortfolio);
   };
 
-  console.log(portfolio);
+  const handleSave = () => {
+    const data = {
+      ...profile,
+      portfolio,
+    };
+  };
 
-  const PreviewPage = () => {
+  const PreviewPage = React.useMemo(() => {
     return (
       <div className="w-full">
-        <h1 className="font-bold text-yellow-700">Preview</h1>
+        <Card className="rounded-md py-0 pb-6 gap-0 overflow-hidden">
+          <div
+            className="bg-yellow-700 w-full relative h-32 bg-color"
+            style={{ backgroundImage: `url` }} // TODO: rubah ke url
+          />
+          <div className="flex align-center justify-center w-full mt-[-64px] z-10">
+            <Avatar>
+              <AvatarImage
+                src="https://github.com/shadcn.png"
+                className="h-32 w-32 rounded-full border-1 border-white"
+              />
+              <AvatarFallback className="flex items-center justify-center h-full w-full text-xs font-semibold bg-white text-yellow-700">
+                MR
+              </AvatarFallback>
+            </Avatar>
+          </div>
+          <CardContent className="flex flex-col gap-2 mt-2 px-2">
+            <CardTitle className="text-center">
+              {profile.name || "Jhon Doe"}
+            </CardTitle>
+            <CardDescription className="text-center">
+              {profile.title || "Your Role"}
+            </CardDescription>
+            <CardDescription className="text-center">
+              {profile.description ||
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, earum!"}
+            </CardDescription>
+          </CardContent>
+          <hr className="my-4 border-t border-gray-300" />
+          <CardContent className="flex flex-col gap-4 px-2">
+            <h4 className="text-sm font-semibold text-yellow-700">Portfolio</h4>
+            {portfolio?.map((val, index) => (
+              <CardPortfolio val={val} index={index} />
+            ))}
+          </CardContent>
+        </Card>
       </div>
     );
-  };
+  });
 
   return (
     <div className="mt-6">
@@ -72,27 +121,24 @@ const EditProfile = () => {
                 >
                   Cancel
                 </Button>
-                <Button
-                  className="cursor-pointer"
-                  onClick={() => console.log("hello world")}
-                >
+                <Button className="cursor-pointer" onClick={handleSave}>
                   Save
                 </Button>
               </div>
             </div>
 
-            <Card className="w-full ">
+            <Card className="w-full rounded-md">
               <CardHeader>
                 <CardTitle>Background Image</CardTitle>
               </CardHeader>
             </Card>
-            <Card className="w-full ">
+            <Card className="w-full rounded-md">
               <CardHeader>
                 <CardTitle>Profile Image</CardTitle>
               </CardHeader>
             </Card>
 
-            <Card className="w-full ">
+            <Card className="w-full rounded-md">
               <CardHeader>
                 <CardTitle>Profile</CardTitle>
               </CardHeader>
@@ -130,7 +176,7 @@ const EditProfile = () => {
 
             {portfolio.map((val, index) => {
               return (
-                <Card className="w-full " key={index}>
+                <Card className="w-full rounded-md" key={index}>
                   <CardHeader className="flex justify-between items-center">
                     <CardTitle>Portfolio {index + 1}</CardTitle>
                     <CircleX
@@ -203,7 +249,7 @@ const EditProfile = () => {
             </Button>
           </div>
         }
-        preview={<PreviewPage />}
+        preview={PreviewPage}
       />
     </div>
   );
