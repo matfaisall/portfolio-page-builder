@@ -7,6 +7,7 @@ import { Pencil } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import CardPortfolio from "@/components/shared/Card/CardPortfolio";
+import Image from "next/image";
 
 const About = () => {
   const getProfileFromStorage = () => {
@@ -68,15 +69,28 @@ const About = () => {
 
         <h1 className="text-2xl font-semibold text-yellow-700">Portfolio</h1>
 
-        <div className="grid grid-cols-2 gap-4">
-          {dataProfile?.portfolio
-            ? dataProfile?.portfolio?.map((val, index) => (
-                <div key={index}>
-                  <CardPortfolio val={val} />
-                </div>
-              ))
-            : null}
-        </div>
+        {dataProfile?.portfolio?.length > 0 ? (
+          <div className="grid grid-cols-2 gap-4">
+            {dataProfile.portfolio.map((val, index) => (
+              <div key={index}>
+                <CardPortfolio val={val} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="w-full flex flex-col items-center justify-center">
+            <Image
+              src="/empty.png"
+              alt="Empty portfolio"
+              width={80}
+              height={80}
+            />
+            <p className="mt-4 text-gray-500 text-sm">No portfolio found</p>
+            <p className="text-gray-500 text-sm">
+              Please add your portfolio on the edit profile page.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
