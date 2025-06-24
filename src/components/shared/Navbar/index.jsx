@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 const Navbar = () => {
   return (
-    <div className="w-full bg-yellow-700 text-white h-16 flex items-center px-4">
+    <div className="w-full bg-yellow-700 text-white h-16 flex items-center">
       <div className="w-[80%] mx-auto flex items-center justify-between">
         <NavigationMenu>
           <NavigationMenuList className="flex flex-row items-center gap-4">
