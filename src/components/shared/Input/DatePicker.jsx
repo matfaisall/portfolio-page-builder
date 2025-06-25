@@ -15,6 +15,12 @@ export function Calendar22({ onChange, value, ...props }) {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState(value);
 
+  React.useEffect(() => {
+    if (value) {
+      setDate(value);
+    }
+  }, [value]);
+
   const handleSelect = (selectedDate) => {
     setDate(selectedDate);
     setOpen(false);
