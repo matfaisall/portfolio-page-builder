@@ -16,7 +16,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import CardPortfolio from "@/components/shared/Card/CardPortfolio";
 import FileUploader from "@/components/shared/Input/FileUploader";
 import { Calendar22 } from "@/components/shared/Input/DatePicker";
-
 import useEdit from "./useEdit";
 
 const EditProfile = () => {

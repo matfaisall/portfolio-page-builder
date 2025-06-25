@@ -31,7 +31,7 @@ const About = () => {
             >
               <Button
                 variant="outline"
-                className="flex items-center gap-1 text-black bg-white/80 hover:bg-white"
+                className="flex items-center gap-1 text-black bg-white/80 hover:bg-white cursor-pointer"
               >
                 <Pencil size={14} />
                 Edit Profile
