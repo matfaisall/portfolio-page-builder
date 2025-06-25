@@ -18,11 +18,13 @@ const useEdit = () => {
     name: "",
     title: "",
     description: "",
-    image: "",
-    background: "",
+    image: null,
+    background: null,
   });
 
   const [portfolio, setPortfolio] = React.useState([portfolioInitialState]);
+
+  console.log("portfolio", portfolio);
 
   React.useEffect(() => {
     const stored = localStorage.getItem("userProfile");
@@ -32,8 +34,8 @@ const useEdit = () => {
         name: parsedData.name || "",
         title: parsedData.title || "",
         description: parsedData.description || "",
-        image: parsedData.image || "",
-        background: parsedData.background || "",
+        image: parsedData.image || null,
+        background: parsedData.background || null,
       });
       setPortfolio(
         parsedData.portfolio?.length > 0

@@ -15,6 +15,7 @@ import { CircleX } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import CardPortfolio from "@/components/shared/Card/CardPortfolio";
 import FileUploader from "@/components/shared/Input/FileUploader";
+import { Calendar22 } from "@/components/shared/Input/DatePicker";
 
 import useEdit from "./useEdit";
 
@@ -32,8 +33,6 @@ const EditProfile = () => {
     handlePortfolioChange,
     handleSave,
   } = useEdit();
-
-  console.log("profile", profile);
 
   const PreviewPage = React.useMemo(() => {
     return (
@@ -78,7 +77,7 @@ const EditProfile = () => {
         </Card>
       </div>
     );
-  }, [profile]);
+  }, [profile, portfolio]);
 
   return (
     <div className="py-8">
@@ -157,7 +156,7 @@ const EditProfile = () => {
 
             {/* portfolio */}
 
-            {portfolio.map((val, index) => {
+            {portfolio?.map((val, index) => {
               return (
                 <Card className="w-full rounded-md" key={index}>
                   <CardHeader className="flex justify-between items-center">
@@ -188,31 +187,38 @@ const EditProfile = () => {
                         handlePortfolioChange(index, "company", e.target.value)
                       }
                     />
-                    <div className="flex flex-row justify-between items-center gap-2">
-                      <Input
-                        type="number"
-                        placeholder="Start Date"
-                        value={val.start_date}
-                        onChange={(e) =>
-                          handlePortfolioChange(
-                            index,
-                            "start_date",
-                            e.target.value
-                          )
-                        }
-                      />
-                      <Input
-                        type="number"
-                        placeholder="End Date"
-                        value={val.end_date}
-                        onChange={(e) =>
-                          handlePortfolioChange(
-                            index,
-                            "end_date",
-                            e.target.value
-                          )
-                        }
-                      />
+                    <div className="flex flex-row  items-center gap-2">
+                      <div className="flex-1">
+                        <Calendar22
+                          value={
+                            val.start_date
+                              ? new Date(val.start_date)
+                              : undefined
+                          }
+                          onChange={(e) =>
+                            handlePortfolioChange(
+                              index,
+                              "start_date",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+
+                      <div className="flex-1">
+                        <Calendar22
+                          value={
+                            val.end_date ? new Date(val.end_date) : undefined
+                          }
+                          onChange={(e) =>
+                            handlePortfolioChange(
+                              index,
+                              "end_date",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
                     </div>
                     <Textarea
                       placeholder="Description"
@@ -226,7 +232,11 @@ const EditProfile = () => {
               );
             })}
 
-            <Button className="cursor-pointer" onClick={handleAddPortfolio}>
+            <Button
+              className="cursor-pointer"
+              onClick={handleAddPortfolio}
+              disabled={portfolio.length >= 10}
+            >
               Add Portfolio
             </Button>
           </div>

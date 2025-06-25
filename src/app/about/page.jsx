@@ -42,7 +42,7 @@ const About = () => {
           <div className="flex pl-4 mt-[-64px] z-10">
             <Avatar>
               <AvatarImage
-                src={dataProfile?.image || "https://github.com/shadcn.png"}
+                src={dataProfile?.image}
                 alt="Profile Image"
                 className="h-32 w-32 rounded-full border border-white bg-cover bg-center"
               />
