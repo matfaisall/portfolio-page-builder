@@ -11,7 +11,7 @@ Perubahan ini dilakukan karena layout awal dinilai kurang efisien, karena banyak
 First, clone the repository:
 
 ```bash
-git clone ...
+git clone https://github.com/matfaisall/portfolio-page-builder.git
 ```
 
 second, install the dependencies:
