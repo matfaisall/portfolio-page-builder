@@ -1,9 +1,15 @@
 "use client";
 import React from "react";
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
+import { CircleAlert } from "lucide-react";
 
-const FileUploader = ({ onFileSelect, label }) => {
-  const [fileName, setFileName] = React.useState("");
+const FileUploader = ({
+  onFileSelect,
+  label,
+  error,
+  handleValidationOnChange,
+}) => {
+  // const [fileName, setFileName] = React.useState("");
   const inputId = React.useId();
 
   const handleFile = (file) => {
@@ -13,12 +19,16 @@ const FileUploader = ({ onFileSelect, label }) => {
     reader.onload = () => {
       const base64 = reader.result;
       onFileSelect?.(base64);
-      setFileName(file.name);
+      // setFileName(file.name);
     };
     reader.readAsDataURL(file);
   };
 
-  const handleChange = (e) => handleFile(e.target.files[0]);
+  const handleChange = (e) => {
+    const value = e.target.files[0];
+    handleFile(value);
+    // handleValidationOnChange("image", value);
+  };
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -58,6 +68,12 @@ const FileUploader = ({ onFileSelect, label }) => {
             <span className="text-xs text-gray-500">Max size: 1 MB</span>
           </label>
         </div>
+        {error && (
+          <div className="flex items-center gap-1 mt-1">
+            <CircleAlert size={12} color="red" />
+            <p className="text-red-500 text-xs">{error}</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { CircleX } from "lucide-react";
+import { CircleX, CircleAlert } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import CardPortfolio from "@/components/shared/Card/CardPortfolio";
 import FileUploader from "@/components/shared/Input/FileUploader";
@@ -26,11 +26,12 @@ const EditProfile = () => {
     profile,
     setProfile,
     portfolio,
-    setPortfolio,
+    error,
 
     handleAddPortfolio,
     handleRemovePortfolio,
     handlePortfolioChange,
+    handleValidationOnChange,
     handleSave,
   } = useEdit();
 
@@ -102,22 +103,26 @@ const EditProfile = () => {
 
             <FileUploader
               label="Background Image"
-              onFileSelect={(base64) =>
+              onFileSelect={(base64) => {
                 setProfile((prev) => ({
                   ...prev,
                   background: base64,
-                }))
-              }
+                }));
+                handleValidationOnChange("background", base64);
+              }}
+              error={error.background}
             />
 
             <FileUploader
               label="Profile Image"
-              onFileSelect={(base64) =>
+              onFileSelect={(base64) => {
                 setProfile((prev) => ({
                   ...prev,
                   image: base64,
-                }))
-              }
+                }));
+                handleValidationOnChange("image", base64);
+              }}
+              error={error.image}
             />
 
             <Card className="w-full rounded-md">
@@ -125,32 +130,68 @@ const EditProfile = () => {
                 <CardTitle>Profile</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
-                <Input
-                  type="text"
-                  placeholder="Name"
-                  value={profile.name}
-                  onChange={(e) =>
-                    setProfile((prev) => ({ ...prev, name: e.target.value }))
-                  }
-                />
-                <Input
-                  type="text"
-                  placeholder="Title | Position"
-                  value={profile.title}
-                  onChange={(e) =>
-                    setProfile((prev) => ({ ...prev, title: e.target.value }))
-                  }
-                />
-                <Textarea
-                  placeholder="Description"
-                  value={profile.description}
-                  onChange={(e) =>
-                    setProfile((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                />
+                <div>
+                  <Input
+                    type="text"
+                    placeholder="Name"
+                    value={profile.name}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setProfile((prev) => ({ ...prev, name: value }));
+                      handleValidationOnChange("name", value);
+                    }}
+                  />
+                  {error.name && (
+                    <div className="flex items-center gap-1">
+                      <CircleAlert size={12} color="red" />
+                      <p className="text-red-500 text-xs"> {error.name}</p>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <Input
+                    type="text"
+                    placeholder="Title | Position"
+                    value={profile.title}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setProfile((prev) => ({
+                        ...prev,
+                        title: value,
+                      }));
+                      handleValidationOnChange("title", value);
+                    }}
+                  />
+                  {error.title && (
+                    <div className="flex items-center gap-1">
+                      <CircleAlert size={12} color="red" />
+                      <p className="text-red-500 text-xs"> {error.title}</p>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <Textarea
+                    placeholder="Description"
+                    value={profile.description}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setProfile((prev) => ({
+                        ...prev,
+                        description: value,
+                      }));
+                      handleValidationOnChange("description", value);
+                    }}
+                  />
+                  {error.description && (
+                    <div className="flex items-center gap-1">
+                      <CircleAlert size={12} color="red" />
+                      <p className="text-red-500 text-xs">
+                        {" "}
+                        {error.description}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
 

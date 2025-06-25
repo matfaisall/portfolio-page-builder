@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { profileSchema } from "@/schemas";
+import { z } from "zod";
 
 const useEdit = () => {
   const router = useRouter();
@@ -23,8 +25,11 @@ const useEdit = () => {
   });
 
   const [portfolio, setPortfolio] = React.useState([portfolioInitialState]);
+  const [error, setError] = React.useState({});
+  //
+  console.log(error);
 
-  console.log("portfolio", portfolio);
+  // console.log("portfolio", portfolio);
 
   React.useEffect(() => {
     const stored = localStorage.getItem("userProfile");
@@ -65,14 +70,35 @@ const useEdit = () => {
     setPortfolio(newPortfolio);
   };
 
-  const handleSave = () => {
-    const data = {
-      ...profile,
-      portfolio,
-    };
+  const handleValidationOnChange = (key, value) => {
+    try {
+      profileSchema.pick({ [key]: true }).parse({ [key]: value });
+      setError((prev) => ({ ...prev, [key]: undefined }));
+    } catch (error) {
+      setError((prev) => ({ ...prev, [key]: error.errors[0].message }));
+    }
+  };
 
-    localStorage.setItem("userProfile", JSON.stringify(data));
-    router.push("/about");
+  const handleSave = () => {
+    try {
+      profileSchema.parse(profile);
+      setError({});
+      const data = {
+        ...profile,
+        portfolio,
+      };
+
+      localStorage.setItem("userProfile", JSON.stringify(data));
+      // router.push("/about");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldError = {};
+        error.errors.forEach((err) => {
+          fieldError[err.path[0]] = err.message;
+        });
+        setError(fieldError);
+      }
+    }
   };
 
   return {
@@ -81,11 +107,12 @@ const useEdit = () => {
     profile,
     setProfile,
     portfolio,
-    setPortfolio,
+    error,
 
     handleAddPortfolio,
     handleRemovePortfolio,
     handlePortfolioChange,
+    handleValidationOnChange,
     handleSave,
   };
 };
