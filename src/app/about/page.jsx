@@ -22,8 +22,8 @@ const About = () => {
       <div className="w-full flex flex-col gap-4">
         <Card className="rounded-md py-0 gap-0 overflow-hidden">
           <div
-            className="bg-yellow-700 w-full relative h-42 bg-color"
-            style={{ backgroundImage: `url` }} // TODO: rubah ke url
+            className="bg-yellow-700 w-full relative h-42 bg-cover bg-center"
+            style={{ backgroundImage: `url(${dataProfile?.background}` }} // TODO: rubah ke url
           >
             <Link
               href="/about/edit"
@@ -42,11 +42,12 @@ const About = () => {
           <div className="flex pl-4 mt-[-64px] z-10">
             <Avatar>
               <AvatarImage
-                src="https://github.com/shadcn.png"
-                className="h-32 w-32 rounded-full border-1 border-white"
+                src={dataProfile?.image || "https://github.com/shadcn.png"}
+                alt="Profile Image"
+                className="h-32 w-32 rounded-full border border-white bg-cover bg-center"
               />
-              <AvatarFallback className="flex items-center justify-center h-full w-full text-xs font-semibold bg-white text-yellow-700">
-                MR
+              <AvatarFallback className="h-32 w-32 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 text-xl font-semibold">
+                ?
               </AvatarFallback>
             </Avatar>
           </div>

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { CircleX } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import CardPortfolio from "@/components/shared/Card/CardPortfolio";
+import FileUploader from "@/components/shared/Input/FileUploader";
 
 import useEdit from "./useEdit";
 
@@ -32,22 +33,25 @@ const EditProfile = () => {
     handleSave,
   } = useEdit();
 
+  console.log("profile", profile);
+
   const PreviewPage = React.useMemo(() => {
     return (
       <div className="w-full">
         <Card className="rounded-md py-0 pb-6 gap-0 overflow-hidden">
           <div
-            className="bg-yellow-700 w-full relative h-32 bg-color"
-            style={{ backgroundImage: `url` }} // TODO: rubah ke url
+            className="bg-yellow-700 w-full relative h-32 bg-color bg-cover bg-center"
+            style={{ backgroundImage: `url(${profile.background}` }} // TODO: rubah ke url
           />
           <div className="flex align-center justify-center w-full mt-[-64px] z-10">
             <Avatar>
               <AvatarImage
-                src="https://github.com/shadcn.png"
-                className="h-32 w-32 rounded-full border-1 border-white"
+                src={profile?.image}
+                alt="Profile Image"
+                className="h-32 w-32 rounded-full border border-white bg-cover bg-center"
               />
-              <AvatarFallback className="flex items-center justify-center h-full w-full text-xs font-semibold bg-white text-yellow-700">
-                MR
+              <AvatarFallback className="h-32 w-32 rounded-full flex items-center justify-center bg-gray-200 text-gray-500 text-xl font-semibold">
+                ?
               </AvatarFallback>
             </Avatar>
           </div>
@@ -74,7 +78,7 @@ const EditProfile = () => {
         </Card>
       </div>
     );
-  });
+  }, [profile]);
 
   return (
     <div className="py-8">
@@ -97,16 +101,25 @@ const EditProfile = () => {
               </div>
             </div>
 
-            <Card className="w-full rounded-md">
-              <CardHeader>
-                <CardTitle>Background Image</CardTitle>
-              </CardHeader>
-            </Card>
-            <Card className="w-full rounded-md">
-              <CardHeader>
-                <CardTitle>Profile Image</CardTitle>
-              </CardHeader>
-            </Card>
+            <FileUploader
+              label="Background Image"
+              onFileSelect={(base64) =>
+                setProfile((prev) => ({
+                  ...prev,
+                  background: base64,
+                }))
+              }
+            />
+
+            <FileUploader
+              label="Profile Image"
+              onFileSelect={(base64) =>
+                setProfile((prev) => ({
+                  ...prev,
+                  image: base64,
+                }))
+              }
+            />
 
             <Card className="w-full rounded-md">
               <CardHeader>
