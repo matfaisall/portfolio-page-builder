@@ -27,7 +27,6 @@ const FileUploader = ({
   const handleChange = (e) => {
     const value = e.target.files[0];
     handleFile(value);
-    // handleValidationOnChange("image", value);
   };
 
   const handleDrop = (e) => {

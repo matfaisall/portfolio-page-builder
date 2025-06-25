@@ -3,6 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { profileSchema } from "@/schemas";
 import { z } from "zod";
+import Swal from "sweetalert2";
 
 const useEdit = () => {
   const router = useRouter();
@@ -26,9 +27,8 @@ const useEdit = () => {
 
   const [portfolio, setPortfolio] = React.useState([portfolioInitialState]);
   const [error, setError] = React.useState({});
-  //
-  console.log(error);
 
+  // console.log(error);
   // console.log("portfolio", portfolio);
 
   React.useEffect(() => {
@@ -89,7 +89,14 @@ const useEdit = () => {
       };
 
       localStorage.setItem("userProfile", JSON.stringify(data));
-      // router.push("/about");
+      Swal.fire({
+        title: "Success",
+        text: "Horreee, Your profile has been saved successfully",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      router.push("/about");
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldError = {};
